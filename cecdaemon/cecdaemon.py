@@ -21,9 +21,15 @@ class CecDaemon():
         Manages configuration parsing and command line args
     """
 
-    def __init__(self):
+    def __init__(self, conffile=None, loglevel=None):
         self.cec = cec
         self._parse_args()
+        if conffile is not None:
+            # rewrite the passed conffile
+            self.args.conffile = conffile
+        if loglevel is not None:
+            # rewrite the passed loglevel
+            self.args.loglevel = loglevel
         self._setup_logging()
         logging.info('Initializing CEC device, please wait...')
         cec_init()
@@ -101,10 +107,10 @@ class CecDaemon():
             sleep(1)
 
 
-def run():
+def run(conffile=None, loglevel=None):
     """ Run the daemon
     """
-    daemon = CecDaemon()
+    daemon = CecDaemon(conffile, loglevel)
     daemon.run()
 
 
