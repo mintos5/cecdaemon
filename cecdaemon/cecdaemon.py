@@ -48,20 +48,20 @@ class CecDaemon():
         try:
             tvconf = conf._sections['tv']
             television = Tv(cec, tvconf)
-        except AttributeError:
+        except KeyError:
             television = Tv(cec, None)
 
         try:
             triggerconf = conf._sections['triggers']
             trigger = Trigger(cec, triggerconf)
-        except AttributeError:
+        except KeyError:
             logging.warning(
                 'No triggers section found in config, triggers disabled')
 
         try:
             keymap = conf._sections['keymap']
             remote = Remote(cec, keymap)
-        except AttributeError:
+        except KeyError:
             remote = Remote(cec, None)
 
         if conf is not None:
