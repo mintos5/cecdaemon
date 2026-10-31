@@ -4,7 +4,6 @@
 import os
 import sys
 import logging
-import threading
 from time import sleep
 from argparse import ArgumentParser
 from configparser import ConfigParser
@@ -23,7 +22,6 @@ class CecDaemon():
     """
 
     def __init__(self, conffile=None, loglevel=None):
-        self._stop_event = threading.Event()
         self.cec = cec
         self._parse_args()
         if conffile is not None:
@@ -105,14 +103,11 @@ class CecDaemon():
         """
 
         logging.info('Running...')
-        while not self._stop_event.is_set():
-            self._stop_event.wait(timeout=1.0)
-        logging.info('Stopped...')
-
-    def stop(self):
-        """Instantly breaks the wait loop."""
-        logging.info('Stopping CecDaemon...')
-        self._stop_event.set()
+        try:
+            while True:
+                sleep(1)
+        except KeyboardInterrupt:
+            logging.info('Stopped by interrupt...')
 
 
 def run(conffile=None, loglevel=None):
